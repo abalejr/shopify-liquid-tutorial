@@ -11,33 +11,39 @@
   {{ 'application.js' | asset_url | script_tag }}
 </head>
 <body>
+  <header>
+    {% for link in linklists.main-menu.links %}
+      {% assign child_list_handle = link.title | handleize %}
+      {% if linklists[child_list_handle].links != blank %}
+        <a href="{{ link.url }}">{{ link.title }}</a>
+        [{% for childlink in linklists[child_list_handle].links %}
+          <a href="{{ childlink.url }}">{{ childlink.title | escape }}</a>
+        {% endfor %}]
+      {% else %}
+        <a href="{{ link.url }}">{{ link.title }}</a>
+      {% endif %}
+    {% endfor %}
 
-  {% for link in linklists.main-menu.links %}
-    {% assign child_list_handle = link.title | handleize %}
-    {% if linklists[child_list_handle].links != blank %}
-      <a href="{{ link.url }}">{{ link.title }}</a>
-      [{% for childlink in linklists[child_list_handle].links %}
-        <a href="{{ childlink.url }}">{{ childlink.title | escape }}</a>
-      {% endfor %}]
-    {% else %}
-      <a href="{{ link.url }}">{{ link.title }}</a>
+    <a href="/cart">cart</a>
+
+    {% if shop.customer_accounts_enabled %}
+      {% if customer %}
+        <a href="/account">account</a>
+        {{ 'log out'  | customer_logout_link }}
+      {% else %}
+        {{ 'log in ' | customer_login_link }}
+        {{ 'register' | customer_register_link }}
+      {% endif %}
     {% endif %}
-  {% endfor %}
-
-  <a href="/cart">cart</a>
-
-  {% if shop.customer_accounts_enabled %}
-    {% if customer %}
-      <a href="/account">account</a>
-      {{ 'log out'  | customer_logout_link }}
-    {% else %}
-      {{ 'log in ' | customer_login_link }}
-      {{ 'register' | customer_register_link }}
-    {% endif %}
-  {% endif %}
+  </header>
 
   <main role="main">
     {{ content_for_layout }}
   </main>
+  <footer id="main-footer">
+    Created by Allen Henry Careful Danger Francis of Assissi Bale Acherbo, Jr. (aka A.J.) with love, using Shopify Theme Kit
+    <br />
+    <strong>Yes, I know it's ugly. This practice store isn't here to test my CSS skills. ;)</strong>
+  </footer>
 </body>
 </html>
