@@ -9,7 +9,15 @@
 <h1>{{ product.title }}</h1>
 <form action="/cart/add" method="post" enctype="multipart/form-data" id="AddToCartForm">
   <select name="id" id="productSelect">
-    <option value="" disabled selected>Choose your {{ variant.title | capitalize }}</option>
+    <option value="" selected disabled hidden>
+      Choose your
+      {% for option in product.options_with_values %}
+        {{ option.name | capitalize }}
+        {% if option.position == 1 %}
+          &
+        {% endif %}
+      {% endfor %}
+    </option>
     {% for variant in product.variants %}
       {% if variant.available %}
         <option value="{{ variant.id }}">
