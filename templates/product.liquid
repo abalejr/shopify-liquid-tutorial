@@ -9,6 +9,7 @@
 <h1>{{ product.title }}</h1>
 <form action="/cart/add" method="post" enctype="multipart/form-data" id="AddToCartForm">
   <select name="id" id="productSelect">
+    <option value="" disabled selected>Choose your {{ variant.title | capitalize }}</option>
     {% for variant in product.variants %}
       {% if variant.available %}
         <option value="{{ variant.id }}">
